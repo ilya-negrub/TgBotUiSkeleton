@@ -1,5 +1,8 @@
-﻿using TgBot.Core.BotMenu.NodeMenuStrategies;
+﻿using System.Security;
+using TgBot.Core.BotMenu.NodeMenuStrategies;
+using TgBot.Core.Interfaces.Permissions;
 using TgBot.Core.Redis.Identity;
+using TgBot.Core.Services.Permissions;
 
 namespace TgBot.Core.Extensions
 {
@@ -19,23 +22,6 @@ namespace TgBot.Core.Extensions
             }
 
             userId = userIdResult;
-            return false;
-        }
-
-        public static bool TryGetPermission(
-            this CallBackStrategyPath path,
-            int index,
-            out Permission permission)
-        {
-            var value = path.GetItemByIndex(index);
-
-            if (Enum.TryParse<Permission>(value, out var result))
-            {
-                permission = result;
-                return true;
-            }
-
-            permission = Permission.Denied;
             return false;
         }
     }

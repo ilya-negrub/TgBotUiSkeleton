@@ -6,6 +6,7 @@ using TgBot.Core.Messages.Markdown;
 using TgBot.Core.Redis.Identity;
 using TgBot.Core.Redis.Repository.Entities;
 using TgBot.Core.Services.Commands;
+using TgBot.Core.Services.Permissions;
 using TgBot.Core.Services.UserServices.Interfaces;
 
 namespace TgBot.Core.Services.UserServices
@@ -55,8 +56,8 @@ namespace TgBot.Core.Services.UserServices
             var userId = _botContext.Update.GetUser().Id;
 
             _userRepository.Set(userId, x => x.IsAuthenticated, true);
-            SetAllowPermission(userId, Permission.Admin);
-            SetAllowPermission(userId, Permission.Menu);
+            SetAllowPermission(userId, PermissionDictionary.Admin);
+            SetAllowPermission(userId, PermissionDictionary.Menu);
             await _userInfoService.Update();
             await _userInfoService.SendMessageUserInfo("Аккаунт инициализирован как основной");
         }
@@ -107,13 +108,13 @@ namespace TgBot.Core.Services.UserServices
 
         private void SetAllowPermission(
            long userId,
-           Permission permission)
+           string permissionName)
         {
             _userRepository.Set(
                userId,
                x => x.Permission,
-               permission.GetFieldId(),
-               Permission.Allow);
+               permissionName,
+               PermissionValue.Allow);
         }
     }
 }

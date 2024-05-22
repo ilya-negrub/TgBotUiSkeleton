@@ -3,8 +3,8 @@ using TgBot.Core.BotMenu.NodeMenuStrategies.Interfaces;
 using TgBot.Core.BotMenu.Nodes.Interfaces;
 using TgBot.Core.Interfaces;
 using TgBot.Core.Messages.Markdown;
-using TgBot.Core.Redis.Identity;
 using TgBot.Core.Services.Commands.Menu;
+using TgBot.Core.Services.Permissions;
 
 namespace TgBot.App.BotMenu.Services.NumbersApi
 {
@@ -16,7 +16,7 @@ namespace TgBot.App.BotMenu.Services.NumbersApi
     {
         public string Name => _name;
 
-        public Permission Permission { get; } = Permission.Menu;
+        public string Permission { get; } = PermissionDictionary.Menu;
 
         public INodeMenuStrategyContext StrategyContext { get; }
 

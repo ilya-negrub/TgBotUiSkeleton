@@ -1,4 +1,5 @@
 ﻿using RedisRepositories.Hash.Interfaces;
+using TgBot.Core.Interfaces.Permissions;
 using TgBot.Core.Redis.Identity;
 using TgBot.Core.Redis.Repository.Entities;
 
@@ -8,17 +9,19 @@ namespace TgBot.Core.BotMenu.NodeMenuStrategies.Users
             : BasePermissionListNodeMenuStrategy
     {
         public AddPermissionListNodeMenuStrategy(
-            IHashRepository<UserHashEntity> userRepository) : base(userRepository)
+            IHashRepository<UserHashEntity> userRepository,
+            IPermissionManager permissionManager)
+            : base(userRepository, permissionManager)
         {
         }
 
-        protected override bool WherePredicate(long userId, Permission permission)
+        protected override bool WherePredicate(long userId, string permissionName)
         {
             var permissionValue = UserRepository.Get(
                 userId,
                 x => x.Permission,
-                permission.GetFieldId());
-            return permissionValue != Permission.Allow;
+                permissionName);
+            return permissionValue != PermissionValue.Allow;
         }
     }
 }

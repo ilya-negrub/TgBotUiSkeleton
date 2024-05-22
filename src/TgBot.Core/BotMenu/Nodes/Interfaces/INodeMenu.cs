@@ -8,7 +8,7 @@ namespace TgBot.Core.BotMenu.Nodes.Interfaces
         // TODO: Add propery Key, для поддержки рефакторинга типа.
         public string Name { get; }
 
-        public Permission Permission { get; }
+        public string Permission { get; }
 
         public INodeMenuStrategyContext StrategyContext { get; }
     }

@@ -1,13 +1,16 @@
 ﻿using RedisRepositories.Hash.Interfaces;
 using TgBot.Core.BotMenu.NodeMenuStrategies.Interfaces;
 using TgBot.Core.Extensions;
+using TgBot.Core.Interfaces.Permissions;
 using TgBot.Core.Redis.Identity;
 using TgBot.Core.Redis.Repository.Entities;
+using TgBot.Core.Services.Permissions;
 
 namespace TgBot.Core.BotMenu.NodeMenuStrategies.Users
 {
     public abstract class BasePermissionListNodeMenuStrategy(
-            IHashRepository<UserHashEntity> _userRepository)
+            IHashRepository<UserHashEntity> _userRepository,
+            IPermissionManager _permissionManager)
             : INodeMenuStrategy
     {
         public IHashRepository<UserHashEntity> UserRepository => _userRepository;
@@ -23,9 +26,8 @@ namespace TgBot.Core.BotMenu.NodeMenuStrategies.Users
 
             foreach (var permission in GetPermissions(userId))
             {
-                var text = permission.GetName();
-                var permissionId = (int)permission;
-                result.Add(new NodeMenuStrategyItem(text, path.Concat(permissionId.ToString())));
+                var text = permission.Description;
+                result.Add(new NodeMenuStrategyItem(text, path.Concat(permission.Name)));
             }
 
             return Task.FromResult(result.ToArray());
@@ -36,20 +38,13 @@ namespace TgBot.Core.BotMenu.NodeMenuStrategies.Users
             return $"Выберите разрешение:";
         }
 
-        protected abstract bool WherePredicate(long userId, Permission permission);
+        protected abstract bool WherePredicate(long userId, string permissionName);
 
-        private IEnumerable<Permission> GetPermissions(long userId)
+        private IEnumerable<PermissionInfo> GetPermissions(long userId)
         {
-            var excluded = new[]
-            {
-                Permission.Denied,
-                Permission.Allow
-            };
-
-            return Enum.GetValues(typeof(Permission))
-                .Cast<Permission>()
-                .Where(x => !excluded.Contains(x))
-                .Where(x => WherePredicate(userId, x));
+            return _permissionManager
+                .GetAll()
+                .Where(x => WherePredicate(userId, x.Name));
         }
     }
 }

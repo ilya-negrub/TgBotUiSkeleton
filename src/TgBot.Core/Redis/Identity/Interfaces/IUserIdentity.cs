@@ -10,6 +10,6 @@
 
         public Task Verify();
 
-        public bool HasPermission(Permission permission);
+        public bool HasPermission(string permissionName);
     }
 }

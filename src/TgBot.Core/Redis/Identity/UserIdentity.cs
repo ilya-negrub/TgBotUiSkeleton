@@ -29,10 +29,10 @@ namespace TgBot.Core.Redis.Identity
 
         public Guid SeesionId => _botContext.Id;
 
-        public bool HasPermission(Permission permission)
+        public bool HasPermission(string permissionName)
         {
-            var value = _userRepository.Get(UserId, x => x.Permission, permission.GetFieldId());
-            return value == Permission.Allow;
+            var value = _userRepository.Get(UserId, x => x.Permission, permissionName);
+            return value == PermissionValue.Allow;
         }
 
         public async Task Verify()

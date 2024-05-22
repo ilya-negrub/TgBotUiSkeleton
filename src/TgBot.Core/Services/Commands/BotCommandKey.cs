@@ -1,19 +1,20 @@
 ﻿using TgBot.Core.Redis.Identity;
+using TgBot.Core.Services.Permissions;
 
 namespace TgBot.Core.Services.Commands
 {
     public static class BotCommandKey
     {
-        private static readonly Dictionary<string, Permission> _keys;
+        private static readonly Dictionary<string, string> _keys;
 
         public static string Menu = "/menu";
         public static string Register = "/register";
 
         static BotCommandKey()
         {
-            _keys = new Dictionary<string, Permission>
+            _keys = new Dictionary<string, string>
             {
-                { Menu, Permission.Menu },
+                { Menu, PermissionDictionary.Menu },
             };
         }
 
@@ -22,7 +23,7 @@ namespace TgBot.Core.Services.Commands
             return _keys.ContainsKey(key);
         }
 
-        public static bool TryGetPermission(string key, out Permission permission)
+        public static bool TryGetPermission(string key, out string permission)
         {
             if (_keys.TryGetValue(key, out var res))
             {
@@ -30,7 +31,7 @@ namespace TgBot.Core.Services.Commands
                 return true;
             }
 
-            permission = Permission.Denied;
+            permission = string.Empty;
             return false;
         }
     }

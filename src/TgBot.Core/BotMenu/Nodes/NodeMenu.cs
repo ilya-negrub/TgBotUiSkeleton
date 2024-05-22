@@ -1,12 +1,11 @@
 ﻿using TgBot.Core.BotMenu.NodeMenuStrategies.Interfaces;
 using TgBot.Core.BotMenu.Nodes.Interfaces;
-using TgBot.Core.Redis.Identity;
 
 namespace TgBot.Core.BotMenu.Nodes
 {
     public abstract class NodeMenu : INodeMenu
     {
-        protected NodeMenu(string name, Permission permission)
+        protected NodeMenu(string name, string permission)
         {
             Name = name;
             Permission = permission;
@@ -14,7 +13,7 @@ namespace TgBot.Core.BotMenu.Nodes
 
         public string Name { get; }
 
-        public Permission Permission { get; }
+        public string Permission { get; }
 
         public INodeMenuStrategyContext StrategyContext { get; }
     }

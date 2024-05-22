@@ -9,7 +9,7 @@ namespace TgBot.Core.Redis.Repository.Entities
 
         public bool IsAuthenticated { get; set; }
 
-        public Permission Permission { get; set; }
+        public PermissionValue Permission { get; set; }
 
         public UserInfo UserInfo { get; set; }
     }

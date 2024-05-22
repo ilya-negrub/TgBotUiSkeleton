@@ -5,6 +5,7 @@ using TgBot.Core.Interfaces;
 using TgBot.Core.Redis.Identity;
 using TgBot.Core.Redis.Repository.Entities;
 using TgBot.Core.Services.Commands.Menu;
+using TgBot.Core.Services.Permissions;
 using TgBot.Core.Services.UserServices.Interfaces;
 
 namespace TgBot.Core.BotMenu.NodeMenuStrategies.Users
@@ -44,7 +45,7 @@ namespace TgBot.Core.BotMenu.NodeMenuStrategies.Users
                     && _userRepository.Exists(userId))
                 {
                     _userRepository.Set(userId, x => x.IsAuthenticated, true);
-                    _userRepository.Set(userId, x => x.Permission, Permission.Menu.GetFieldId(), Permission.Allow);
+                    _userRepository.Set(userId, x => x.Permission, PermissionDictionary.Menu, PermissionValue.Allow);
 
                     await _userInfoService.SendMessageUserInfo(userId, "Пользователь успешно добавлен");
 

@@ -1,6 +1,6 @@
 ﻿using TgBot.Core.BotMenu.NodeMenuStrategies.Interfaces;
 using TgBot.Core.BotMenu.Nodes.Interfaces;
-using TgBot.Core.Redis.Identity;
+using TgBot.Core.Services.Permissions;
 
 namespace TgBot.App.BotMenu.Services
 {
@@ -8,7 +8,7 @@ namespace TgBot.App.BotMenu.Services
     {
         public string Name { get; } = "Сервисы";
 
-        public Permission Permission { get; } = Permission.Menu;
+        public string Permission { get; } = PermissionDictionary.Menu;
 
         public INodeMenuStrategyContext StrategyContext { get; }
     }

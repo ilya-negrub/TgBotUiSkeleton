@@ -5,6 +5,7 @@ using RedisRepositories.Tree.Interfaces;
 using TgBot.Core.BotMenu.Nodes.Interfaces;
 using TgBot.Core.Interfaces;
 using TgBot.Core.Interfaces.Factory;
+using TgBot.Core.Interfaces.Permissions;
 using TgBot.Core.Interfaces.Scope;
 using TgBot.Core.Redis.Identity;
 using TgBot.Core.Redis.Identity.Interfaces;
@@ -12,6 +13,7 @@ using TgBot.Core.Services;
 using TgBot.Core.Services.Commands;
 using TgBot.Core.Services.Commands.Menu;
 using TgBot.Core.Services.Factory;
+using TgBot.Core.Services.Permissions;
 using TgBot.Core.Services.Scope;
 using TgBot.Core.Services.UserServices;
 using TgBot.Core.Services.UserServices.Interfaces;
@@ -23,7 +25,8 @@ namespace TgBot.Core.Ioc
         public static void RegisterTgBot(this IServiceCollection services)
         {
             services.RegisterScopeService();
-            services.AddScoped<IFactory, Factory>();
+            services.RegistreFactory();
+            
             services.AddSingleton<ISerializer, JsonSerializer>();
             services.AddScoped<IBotClientProvider, BotClientProvider>();
             services.AddScoped<IBotBootstrapper, BotBootstrapper>();
@@ -33,7 +36,11 @@ namespace TgBot.Core.Ioc
             services.AddScoped<IRegisterUserService, RegisterUserService>();
             services.RegisterBotContext<BotContext>();
 
-            services.RegistreBotCommand();
+            // Permission
+            services.AddScoped<IPermissionDictionary, PermissionDictionary>();
+            services.AddScoped<IPermissionManager, PermissionManager>();
+
+            services.RegistreFactory();
             services.RegistreBotTask();
 
             // Services
@@ -53,20 +60,21 @@ namespace TgBot.Core.Ioc
             services.AddKeyedScoped<IBotCommand, BotMenuCommand<TTreeEntity>>(BotCommandKey.Menu);
         }
 
-        private static void RegisterScopeService(this IServiceCollection services)
-        {
-            services.AddSingleton<IScopeService, ScopeService>();
-            services.AddScoped<BotScopeHandler>();
-        }
-
         public static IScopeResult<IBotBootstrapper> GetBootstrapper(this IServiceProvider provider)
         {
             var scope = provider.GetService<IScopeService>();
             return scope.CreateScope(x => x.GetService<IBotBootstrapper>());
         }
 
-        private static void RegistreBotCommand(this IServiceCollection services)
+        private static void RegisterScopeService(this IServiceCollection services)
         {
+            services.AddSingleton<IScopeService, ScopeService>();
+            services.AddScoped<BotScopeHandler>();
+        }
+
+        private static void RegistreFactory(this IServiceCollection services)
+        {
+            services.AddScoped<IFactory, Factory>();
             services.AddScoped<IBotCommandFactory>(x => new BotCommandFactory(x));
         }
 
