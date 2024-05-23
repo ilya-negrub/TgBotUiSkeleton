@@ -6,6 +6,4 @@ namespace TgBot.Core.Interfaces.Permissions
     {
         public IEnumerable<PermissionInfo> RegisterPermission();
     }
-
-    
 }

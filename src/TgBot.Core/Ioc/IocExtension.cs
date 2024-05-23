@@ -30,7 +30,7 @@ namespace TgBot.Core.Ioc
 
             services.RegisterScopeService();
             services.RegistreFactory();
-            
+
             services.AddSingleton<ISerializer, JsonSerializer>();
             services.AddScoped<IBotClientProvider, BotClientProvider>();
             services.AddScoped<IBotBootstrapper, BotBootstrapper>();
