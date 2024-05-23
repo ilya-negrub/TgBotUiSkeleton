@@ -19,11 +19,6 @@ namespace TgBot.Core.Services.Scope
             var result = new CreateScopeResult<TResult>(_hostProvider);
             result.Processing(func);
             return result;
-
-            /// TODO: add using or used IDisposable
-            /*using*/ /*var serviceScope = _hostProvider.CreateScope();
-            var provider = serviceScope.ServiceProvider;
-            return func(provider);*/
         }
 
         public Task CreateScope<THandler>(CancellationToken token)
