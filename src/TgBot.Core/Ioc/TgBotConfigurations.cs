@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TgBot.Core.Interfaces;
 using TgBot.Core.Interfaces.Permissions;
+using TgBot.Core.Services.Commands;
 
 namespace TgBot.Core.Ioc
 {
@@ -19,9 +20,10 @@ namespace TgBot.Core.Ioc
             _services.AddScoped<IPermissionDictionary, TIPermission>();
         }
 
-        public void RegisterCommand<TCommand>(string commandKey)
+        public void RegisterCommand<TCommand>(string commandKey, string permission)
             where TCommand : class, IBotCommand
         {
+            BotCommandKey.RegisterPermission(commandKey, permission);
             _services.AddKeyedScoped<IBotCommand, TCommand>(commandKey);
         }
     }

@@ -1,5 +1,4 @@
-﻿using TgBot.Core.Redis.Identity;
-using TgBot.Core.Services.Permissions;
+﻿using TgBot.Core.Services.Permissions;
 
 namespace TgBot.Core.Services.Commands
 {
@@ -33,6 +32,11 @@ namespace TgBot.Core.Services.Commands
 
             permission = string.Empty;
             return false;
+        }
+
+        internal static void RegisterPermission(string commandKey, string permission)
+        {
+            _keys.Add(commandKey, permission);
         }
     }
 }
