@@ -22,8 +22,12 @@ namespace TgBot.Core.Ioc
 {
     public static class IocExtension
     {
-        public static void RegisterTgBot(this IServiceCollection services)
+        public static void RegisterTgBot(
+            this IServiceCollection services,
+            Action<TgBotConfigurations> actionConfig = null)
         {
+            var config = new TgBotConfigurations(services);
+
             services.RegisterScopeService();
             services.RegistreFactory();
             
@@ -40,11 +44,12 @@ namespace TgBot.Core.Ioc
             services.AddScoped<IPermissionDictionary, PermissionDictionary>();
             services.AddScoped<IPermissionManager, PermissionManager>();
 
-            services.RegistreFactory();
             services.RegistreBotTask();
 
             // Services
             services.AddScoped<IUserInfoService, UserInfoService>();
+
+            actionConfig?.Invoke(config);
         }
 
         public static void RegisterMenuTree<TTreeEntity>(
